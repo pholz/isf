@@ -15,7 +15,13 @@
                 "NAME": "peakFreq",
                 "TYPE": "float",
                 "DEFAULT": 0.5
+        },
+        {
+                "NAME": "peakWidth",
+                "TYPE": "float",
+                "DEFAULT": 0.5
         }
+
 
   ]
 }
@@ -49,7 +55,7 @@ void main(void)
     bool regular = distance(gl_FragCoord.x, sqpos[whichsq]) <
         peakFreq * 100.0 * floor(0.5+sin( (gl_FragCoord.y + TIME * 50.0) / (peakFreq*50.0)))
         || distance(gl_FragCoord.x, sqpos[whichsq])
-        < RENDERSIZE.x/45.0;
+        < peakWidth * RENDERSIZE.x/20.0;
 
     if (!regular) discard;
 
