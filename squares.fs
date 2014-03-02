@@ -10,6 +10,11 @@
                 "NAME": "filters",
                 "TYPE": "color",
                 "DEFAULT": [0.5, 0.5, 0.5, 0.5]
+        },
+        {
+                "NAME": "peakFreq",
+                "TYPE": "float",
+                "DEFAULT": 0.5
         }
 
   ]
@@ -39,6 +44,15 @@ void main(void)
 
     float passed = distance(gl_FragCoord.y, RENDERSIZE.y/2.0) / RENDERSIZE.y < filters[whichsq] ? 1.0 : 0.0;
 
-    gl_FragColor = vec4(passed);
+    if (passed < 1.0) discard;
+
+    bool regular = distance(gl_FragCoord.x, sqpos[whichsq]) <
+        peakFreq * 100.0 * floor(0.5+sin( (gl_FragCoord.y + TIME * 50.0) / (peakFreq*50.0)))
+        || distance(gl_FragCoord.x, sqpos[whichsq])
+        < RENDERSIZE.x/45.0;
+
+    if (!regular) discard;
+
+    gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
 
 }
